@@ -8,13 +8,13 @@ describe('Test api', function() {
   describe('get definition', function() {
     it('should return definition.yml', done => {
       request(server)
-          .get('/definition.yml')
-          .expect(res => {
-            const definition = res.text;
-            const definitionFile = fs.readFileSync('definition.yml');
-            expect(definition).to.equal(definitionFile.toString());
-          })
-          .expect(200, done);
+        .get('/definition.yml')
+        .expect(res => {
+          const definition = res.text;
+          const definitionFile = fs.readFileSync('definition.yml');
+          expect(definition).to.equal(definitionFile.toString());
+        })
+        .expect(200, done);
     });
   });
 
@@ -22,8 +22,8 @@ describe('Test api', function() {
   describe('with unknown route', function() {
     it('should reply with 404', done => {
       request(server)
-          .get('/no-where')
-          .expect(404, done);
+        .get('/no-where')
+        .expect(404, done);
     });
   });
 
@@ -32,37 +32,37 @@ describe('Test api', function() {
     describe('with no input', function() {
       it('should reply with 400', done => {
         request(server)
-            .get('/communes')
-            .expect(400, done);
+          .get('/communes')
+          .expect(400, done);
       });
     });
 
     describe('with code insee', function() {
       it('should work for insee 94067', function() {
         request(server)
-            .get('/communes/?code=94067')
-            .expect(200);
+          .get('/communes/?code=94067')
+          .expect(200);
       });
 
 
       describe('with name', function() {
         it('should work for Paris', done => {
           request(server)
-              .get('/communes/?nom=paris')
-              .expect(200, done);
+            .get('/communes/?nom=paris')
+            .expect(200, done);
         });
       });
 
       describe('with code postal', function() {
         it('should work for cp 28100', done => {
           request(server)
-              .get('/communes/?codePostal=28100')
-              .expect(res => {
-                expect(res.body.length).to.equal(1);
-                const commune = res.body[0];
-                expect(commune.nom).to.equal('Dreux');
-              })
-              .end(done);
+            .get('/communes/?codePostal=28100')
+            .expect(res => {
+              expect(res.body.length).to.equal(1);
+              const commune = res.body[0];
+              expect(commune.nom).to.equal('Dreux');
+            })
+            .end(done);
         });
       });
 
@@ -84,13 +84,13 @@ describe('Test api', function() {
     describe('with format', function() {
       it('should return a FeatureCollection (geojson)', done => {
         request(server)
-            .get('/communes/?code=94067&format=geojson')
-            .expect(res => {
-              const communes = res.body;
-              expect(communes).to.have.key('type');
-              expect(communes.type).to.be('FeatureCollection');
-            })
-            .end(done);
+          .get('/communes/?code=94067&format=geojson')
+          .expect(res => {
+            const communes = res.body;
+            expect(communes).to.have.key('type');
+            expect(communes.type).to.be('FeatureCollection');
+          })
+          .end(done);
       });
     });
 
@@ -110,12 +110,12 @@ describe('Test api', function() {
           'surface',
         ];
         request(server)
-            .get('/communes/54099?fields=' + fields.join(','))
-            .expect(res => {
-              const commune = res.body;
-              expect(commune).to.only.have.keys(fields);
-            })
-            .end(done);
+          .get('/communes/54099?fields=' + fields.join(','))
+          .expect(res => {
+            const commune = res.body;
+            expect(commune).to.only.have.keys(fields);
+          })
+          .end(done);
       });
     });
   });
@@ -125,45 +125,45 @@ describe('Test api', function() {
     describe('with no input', function() {
       it('should reply with 200', done => {
         request(server)
-            .get('/departements')
-            .expect(200, done);
+          .get('/departements')
+          .expect(200, done);
       });
       it('should reply all 101 departements', done => {
         request(server)
-            .get('/departements')
-            .expect(res => {
-              expect(res.body.length).to.equal(101);
-            })
-            .end(done);
+          .get('/departements')
+          .expect(res => {
+            expect(res.body.length).to.equal(101);
+          })
+          .end(done);
       });
     });
 
     describe('with code', function() {
       it('should work for 75', function() {
         request(server)
-            .get('/departements/?code=75')
-            .expect(200);
+          .get('/departements/?code=75')
+          .expect(200);
       });
 
 
       describe('with name', function() {
         it('should work for Paris', done => {
           request(server)
-              .get('/departements/?nom=paris')
-              .expect(200, done);
+            .get('/departements/?nom=paris')
+            .expect(200, done);
         });
       });
 
       describe('with code region', function() {
         it('should work for 11', done => {
           request(server)
-              .get('/departements/?codeRegion=11')
-              .expect(res => {
-                expect(res.body.length).to.equal(8);
-                const departement = res.body[0];
-                expect(departement.nom).to.equal('Paris');
-              })
-              .end(done);
+            .get('/departements/?codeRegion=11')
+            .expect(res => {
+              expect(res.body.length).to.equal(8);
+              const departement = res.body[0];
+              expect(departement.nom).to.equal('Paris');
+            })
+            .end(done);
         });
         it('should reply a departement', done => {
           request(server)
@@ -180,26 +180,26 @@ describe('Test api', function() {
       describe('list communes', function() {
         it('should reply the list of communes', done => {
           request(server)
-              .get('/departements/11/communes')
-              .expect(res => {
-                expect(res.body.length).to.equal(436);
-              })
-              .end(done);
+            .get('/departements/11/communes')
+            .expect(res => {
+              expect(res.body.length).to.equal(436);
+            })
+            .end(done);
         });
         it('should reply with 404', done => {
           request(server)
-              .get('/departements/666/communes')
-              .expect(404, done);
+            .get('/departements/666/communes')
+            .expect(404, done);
         });
         it('should return a FeatureCollection (geojson)', done => {
           request(server)
-              .get('/departements/75/communes?format=geojson')
-              .expect(res => {
-                const communes = res.body;
-                expect(communes).to.have.key('type');
-                expect(communes.type).to.be('FeatureCollection');
-              })
-              .end(done);
+            .get('/departements/75/communes?format=geojson')
+            .expect(res => {
+              const communes = res.body;
+              expect(communes).to.have.key('type');
+              expect(communes.type).to.be('FeatureCollection');
+            })
+            .end(done);
         });
       });
 
@@ -214,12 +214,12 @@ describe('Test api', function() {
           'region',
         ];
         request(server)
-            .get('/departements/54?fields=' + fields.join(','))
-            .expect(res => {
-              const commune = res.body;
-              expect(commune).to.only.have.keys(fields);
-            })
-            .end(done);
+          .get('/departements/54?fields=' + fields.join(','))
+          .expect(res => {
+            const commune = res.body;
+            expect(commune).to.only.have.keys(fields);
+          })
+          .end(done);
       });
     });
   });
@@ -229,24 +229,24 @@ describe('Test api', function() {
     describe('with no input', function() {
       it('should reply with 200', done => {
         request(server)
-            .get('/regions')
-            .expect(200, done);
+          .get('/regions')
+          .expect(200, done);
       });
       it('should reply all 18 regions', done => {
         request(server)
-            .get('/regions')
-            .expect(res => {
-              expect(res.body.length).to.equal(18);
-            })
-            .end(done);
+          .get('/regions')
+          .expect(res => {
+            expect(res.body.length).to.equal(18);
+          })
+          .end(done);
       });
     });
 
     describe('with code', function() {
       it('should work for 28', function() {
         request(server)
-            .get('/regions/?code=28')
-            .expect(200);
+          .get('/regions/?code=28')
+          .expect(200);
       });
       it('should reply a departement', done => {
         request(server)
@@ -263,28 +263,28 @@ describe('Test api', function() {
     describe('with name', function() {
       it('should work for Normandie', done => {
         request(server)
-            .get('/regions/?nom=normandie')
-            .expect(res => {
-              expect(res.body).to.have.length(1);
-              expect(res.body[0]).to.have.key('_score');
-            })
-            .expect(200, done);
+          .get('/regions/?nom=normandie')
+          .expect(res => {
+            expect(res.body).to.have.length(1);
+            expect(res.body[0]).to.have.key('_score');
+          })
+          .expect(200, done);
       });
     });
 
     describe('list departements', function() {
       it('should reply the list of departements', done => {
         request(server)
-            .get('/regions/84/departements')
-            .expect(res => {
-              expect(res.body.length).to.equal(12);
-            })
-            .end(done);
+          .get('/regions/84/departements')
+          .expect(res => {
+            expect(res.body.length).to.equal(12);
+          })
+          .end(done);
       });
       it('should reply with 404', done => {
         request(server)
-            .get('/regions/666/departements')
-            .expect(404, done);
+          .get('/regions/666/departements')
+          .expect(404, done);
       });
     });
 
